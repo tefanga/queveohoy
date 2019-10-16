@@ -49,10 +49,19 @@ function obtenerTodasLasPeliculas(req, res){
             console.log("Hubo un error en la consulta " + error.message);
             return res.status(404).send("Hubo un error en la consulta");
         }
-        var total = resultado.length;
-        var respuesta = {peliculas: resultado, total: total}
-
-        res.send(respuesta)
+        
+        var index = sql.indexOf("limit");
+        var sql2 = sql.substring(0, index);
+        
+        con.query(sql2, function(error, resultado1, fields){
+            if(error){
+                console.log("Hubo un error en la consulta " + error.message);
+                return res.status(404).send("Hubo un error en la consulta");
+            }
+            var total = resultado1.length;
+            var respuesta = {peliculas: resultado, total: total}
+            res.send(respuesta)
+        })
     })
 }
 
